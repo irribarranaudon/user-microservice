@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,23 +22,14 @@ public class UserController {
 
     @PostMapping()
     public ResponseEntity<?> saveUser(@RequestBody User user) {
-        User newUser = userService.save(user);
+        User newUser = userService.saveOrUpdate(user, null);
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> saveUser(@RequestBody User user, @PathVariable UUID id) {
-        Optional<User> oUser = userService.findById(id);
-        if (oUser.isPresent()) {
-            User userToUpdate = oUser.get();
-            userToUpdate.setEmail(user.getEmail());
-            userToUpdate.setIsActive(user.getIsActive());
-            userToUpdate.setModified(LocalDate.now());
-            userToUpdate.setName(user.getName());
-            userService.save(userToUpdate);
-            return ResponseEntity.status(HttpStatus.CREATED).body(userToUpdate);
-        }
-        return ResponseEntity.notFound().build();
+        User updatedUser = userService.saveOrUpdate(user, id);
+        return ResponseEntity.status(HttpStatus.CREATED).body(updatedUser);
     }
 
     @GetMapping()
@@ -50,7 +40,15 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getUser(@PathVariable UUID id) {
         Optional<User> userOptional = userService.findById(id);
-        userOptional.ifPresent(user -> ResponseEntity.ok().body(user));
+        if (userOptional.isPresent()) {
+            return ResponseEntity.ok().body(userOptional.get());
+        }
         return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable UUID id) {
+        userService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
