@@ -4,11 +4,16 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users",
+        indexes = @Index(
+                name = "idx_user_email",
+                columnList = "email",
+                unique = true
+        ))
 @Data
 public class User {
 
@@ -21,14 +26,24 @@ public class User {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
     private String name;
+    @Column(unique = true)
     private String email;
     private String password;
     @Column(name = "last_login")
-    private LocalDate lastLogin;
-    private LocalDate modified;
-    private LocalDate created;
+    private LocalDateTime lastLogin;
+    private LocalDateTime modified;
+    private LocalDateTime created;
     private String token;
     @Column(name = "is_active")
     private Boolean isActive;
+
+    @PrePersist
+    public void prePersist() {
+        LocalDateTime now = LocalDateTime.now();
+        this.created = now;
+        this.modified = now;
+        this.lastLogin = now;
+        this.isActive = true;
+    }
 
 }
