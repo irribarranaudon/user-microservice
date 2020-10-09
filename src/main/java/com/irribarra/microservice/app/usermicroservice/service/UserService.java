@@ -10,9 +10,11 @@ public interface UserService {
 
     List<User> findAll();
 
+    Optional<User> findByEmail(String email);
+
     Optional<User> findById(UUID id);
 
-    User save(User user);
+    User saveOrUpdate(User user, UUID id);
 
     void deleteById(UUID id);
 
