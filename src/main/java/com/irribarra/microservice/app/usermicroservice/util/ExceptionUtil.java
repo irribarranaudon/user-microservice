@@ -1,30 +1,25 @@
 package com.irribarra.microservice.app.usermicroservice.util;
 
-import com.irribarra.microservice.app.usermicroservice.exception.BussinesException;
+import com.irribarra.microservice.app.usermicroservice.exception.BusinessException;
 import org.springframework.http.HttpStatus;
 
+/**
+ * Clase util para el manejo de errores en el microservicio.
+ */
 public class ExceptionUtil {
 
     public ExceptionUtil() {
     }
 
-    public static void throwExcecIfFalse(boolean valid, String message) throws BussinesException {
-        throwExecIf(!valid, message);
-    }
-
-    public static void throwExcecIfFalse(boolean valid, String message, HttpStatus httpStatus) throws BussinesException {
-        throwExecIf(!valid, message, httpStatus);
-    }
-
-    public static void throwExecIf(boolean invalid, String message) throws BussinesException {
+    public static void throwExecIf(boolean invalid, String message) throws BusinessException {
         if (invalid) {
-            throw new BussinesException(message, HttpStatus.BAD_REQUEST);
+            throw new BusinessException(message, HttpStatus.BAD_REQUEST);
         }
     }
 
-    public static void throwExecIf(boolean invalid, String message, HttpStatus httpStatus) throws BussinesException {
+    public static void throwExecIf(boolean invalid, String message, HttpStatus httpStatus) throws BusinessException {
         if (invalid) {
-            throw new BussinesException(message, httpStatus);
+            throw new BusinessException(message, httpStatus);
         }
     }
 }

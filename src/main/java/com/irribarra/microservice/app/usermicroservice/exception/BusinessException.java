@@ -2,16 +2,16 @@ package com.irribarra.microservice.app.usermicroservice.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class BussinesException extends Exception {
+public class BusinessException extends Exception {
 
     private final HttpStatus httpStatus;
 
-    public BussinesException(String message) {
+    public BusinessException(String message) {
         super(message);
         this.httpStatus = HttpStatus.BAD_REQUEST;
     }
 
-    public BussinesException(String message, HttpStatus httpStatus) {
+    public BusinessException(String message, HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
     }
