@@ -5,6 +5,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -36,6 +38,12 @@ public class User {
     private String token;
     @Column(name = "is_active")
     private Boolean isActive;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Phone> phones;
+
+    public User() {
+        this.phones = new ArrayList<>();
+    }
 
     @PrePersist
     public void prePersist() {
@@ -44,6 +52,14 @@ public class User {
         this.modified = now;
         this.lastLogin = now;
         this.isActive = true;
+    }
+
+    public void addPhone(Phone phone) {
+        this.phones.add(phone);
+    }
+
+    public void removePhone(Phone phone) {
+        this.phones.remove(phone);
     }
 
 }

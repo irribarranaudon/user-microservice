@@ -13,7 +13,9 @@ public class Phone {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String number;
+    @Column(name = "city_code")
     private String cityCode;
+    @Column(name = "country_code")
     private String countryCode;
 
 }
